@@ -1,6 +1,7 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TarefaModel } from '../../models/tarefa.model';
+import { TarefaService } from '../../services/tarefa.service';
 
 @Component({
   selector: 'app-tarefa-listar',
@@ -9,6 +10,9 @@ import { TarefaModel } from '../../models/tarefa.model';
   styleUrl: './tarefa-listar.scss',
 })
 export class TarefaListar {
+
+  private readonly tarefaService = inject(TarefaService);
+
   tarefas = signal<TarefaModel[]>([]);
 
   ngOnInit() {
@@ -17,27 +21,33 @@ export class TarefaListar {
 
   readonly totalMinutos = computed(() => {
     let total = 0;
-    this.tarefas().forEach(tarefa => {
+
+    this.tarefas().forEach((tarefa) => {
       total += tarefa.horasEstimadas ?? 0;
     });
+
     return total;
-  })
+  });
 
   carregarTarefas(): void {
-    const tarefasString = localStorage.getItem("tarefas");
-    if (tarefasString === null) {
-      return;
-    }
+    this.tarefaService.listar().subscribe({
 
-    const tarefasLista = JSON.parse(tarefasString) as TarefaModel[];
+      // next = sucesso
+      next: (tarefas) => {
 
-    const tarefasOrdenadas = tarefasLista.sort((x, y) => x.descricao.localeCompare(y.descricao));
-    this.tarefas.set(tarefasOrdenadas);
-  }
+        const tarefasOrdenadas = tarefas.sort((x, y) =>
+          x.descricao.localeCompare(y.descricao)
+        );
 
-  apagar(id: string): void {
-    this.tarefas.update(tarefas => tarefas.filter(x => x.id !== id))
-    const tarefasString = JSON.stringify(this.tarefas());
-    localStorage.setItem("tarefas", tarefasString);
+        this.tarefas.set(tarefasOrdenadas);
+      },
+
+      // error = falha
+      error: (error) => {
+        console.log(error);
+        alert('Erro ao carregar tarefas');
+      }
+
+    });
   }
 }
