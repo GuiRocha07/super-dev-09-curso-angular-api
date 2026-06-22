@@ -1,0 +1,21 @@
+<h1>Cadastrar Projeto</h1>
+
+<label>Nome</label>
+<input
+    type="text"
+    [(ngModel)]="projeto().nome"
+    placeholder="Digite o nome do projeto">
+
+<label>Código do Projeto</label>
+<input
+    type="text"
+    [(ngModel)]="projeto().codigoProjeto"
+    placeholder="Digite o código do projeto">
+
+<label>Custo Estimado</label>
+<input
+    type="number"
+    [(ngModel)]="projeto().custoEstimado"
+    placeholder="Digite o custo estimado">
+
+<button (click)="salvar()">Salvar</button>

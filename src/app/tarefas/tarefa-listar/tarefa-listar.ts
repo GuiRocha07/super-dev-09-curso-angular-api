@@ -31,10 +31,7 @@ export class TarefaListar {
 
   carregarTarefas(): void {
     this.tarefaService.listar().subscribe({
-
-      // next = sucesso
       next: (tarefas) => {
-
         const tarefasOrdenadas = tarefas.sort((x, y) =>
           x.descricao.localeCompare(y.descricao)
         );
@@ -42,12 +39,10 @@ export class TarefaListar {
         this.tarefas.set(tarefasOrdenadas);
       },
 
-      // error = falha
       error: (error) => {
-        console.log(error);
+        console.error(error);
         alert('Erro ao carregar tarefas');
       }
-
     });
   }
 }

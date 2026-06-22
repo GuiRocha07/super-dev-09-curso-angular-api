@@ -1,0 +1,46 @@
+
+<a routerLink="/projetos/cadastrar">
+    <button>Cadastrar Projeto</button>
+</a>
+
+<hr>
+
+
+<h1>Projetos</h1>
+
+<span>
+  Quantidade de projetos:
+  <strong>{{ projetos().length }}</strong>
+</span>
+
+<table>
+
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Código</th>
+      <th>Custo</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    @for(projeto of projetos(); track projeto.id){
+
+      <tr>
+
+        <td>{{ projeto.nome }}</td>
+
+        <td>{{ projeto.codigoProjeto }}</td>
+
+        <td>
+          R$ {{ projeto.custoEstimado }}
+        </td>
+
+      </tr>
+
+    }
+
+  </tbody>
+
+</table>
